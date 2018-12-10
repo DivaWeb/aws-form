@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Contact Form</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+  function submitToAPI(e) {
+     e.preventDefault();
+     var URL = "https://k32nu2hki7.execute-api.us-east-1.amazonaws.com/default/aws-form";
+
+          var Namere = /[A-Za-z]{1}[A-Za-z]/;
+          if (!Namere.test($("#firstName").val())) {
+                       alert ("First name can not less than 2 char");
+              return;
+          }
+          if (!Namere.test($("#lastName").val())) {
+              alert ("Last name can not be less than 2 char");
+              return;
+          }
+          if ($("#email").val()=="") {
+              alert ("Please enter your email id");
+              return;
+          }
+
+          var reeamil = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/;
+          if (!reeamil.test($("#email").val())) {
+              alert ("Please enter valid email address");
+              return;
+          }
+
+     var fname = $("#firstName").val();
+     var lname = $("#lastName").val();
+     var email = $("#email").val();
+     var data = {
+        first : fname,
+        last : lname,
+        email : email
+      };
+
+     $.ajax({
+       type: "POST",
+       url : "https://abc1234.execute-api.us-east-1.amazonaws.com/01/contact",
+       dataType: "json",
+       crossDomain: "true",
+       contentType: "application/json; charset=utf-8",
+       data: JSON.stringify(data),
+
+
+       success: function () {
+         // clear form and show a success message
+         alert("Successfull");
+         document.getElementById("contact-form").reset();
+     location.reload();
+       },
+       error: function () {
+         // show an error message
+         alert("UnSuccessfull");
+       }});
+   }
+</script>
+</head>
+<body>
+<form id="contact-form" method="post">
+  <label>First Name:</label>
+  <input type="text" style="height:25px;" id="firstName" placeholder="First Name" class="form-control" style="width:100px;" /><br/>
+  <label>Last Name:</label>
+  <input type="text" style="height:25px;" id="lastName" placeholder="Last Name" class="form-control" style="width:100px;" /><br/>
+  <label>Email:</label>
+  <input type="text" style="height:25px;" id="email" placeholder="Email" class="form-control" style="width:100px;" />
+  <div class="g-recaptcha" data-sitekey="6Lc7cVMUAAAAAM1yxf64wrmO8gvi8A1oQ_ead1ys" class="form-control" style="width:100%;"></div>
+  <button type="button" onClick="submitToAPI(event)" class="btn btn-lg" style="margin-top:20px;">Submit</button>
+
+</body>
+
+
+</html>
